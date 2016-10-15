@@ -1,0 +1,224 @@
+<!--//   File: index.html
+//   Author: Rahulkumar Gaddam
+//   Date: 10/03/2016
+//   Desc:
+//   Other files required: first.ts,first.js
+-->
+<html lang="en" >
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Angular Material style sheet -->
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+
+<link rel="stylesheet" href="prism.css">
+
+  <style>
+
+
+  .gridListdemoDynamicTiles .gray {
+    background: #f5f5f5; }
+
+  .gridListdemoDynamicTiles .green {
+    background: #b9f6ca; }
+
+  .gridListdemoDynamicTiles .yellow {
+    background: #ffff8d; }
+
+  .gridListdemoDynamicTiles .blue {
+    background: #84ffff; }
+
+  .gridListdemoDynamicTiles .darkBlue {
+    background: #80d8ff; }
+
+  .gridListdemoDynamicTiles .deepBlue {
+    background: #448aff; }
+
+  .gridListdemoDynamicTiles .purple {
+    background: #b388ff; }
+
+  .gridListdemoDynamicTiles .lightPurple {
+    background: #8c9eff; }
+
+  .gridListdemoDynamicTiles .red {
+    background: #ff8a80; }
+
+  .gridListdemoDynamicTiles .pink {
+    background: #ff80ab; }
+
+  </style>
+</head>
+<body ng-app="gridListDemoApp" ng-cloak>
+<script src="prism.js"></script>
+  <!--
+    Your HTML content here
+  -->
+<div ng-view></div>
+
+  <md-toolbar style="position: fixed;">
+    <div class="md-toolbar-tools" ng-hide="showSearchBarDiv">
+
+      <h2>
+        <span>Cracking the Coding Interview Solutions - TypeScript By <a href="http://rahulkumar.theh2o.info">Rahul</a></span>
+
+      </h2>
+
+      <span flex></span>
+
+
+    </div>
+
+</md-toolbar>
+<md-content layout-padding style="overflow: scroll;padding-top:5%;">
+<div ng-controller="gridListDemoCtrl as vm" flex="" ng-cloak="" class="gridListdemoDynamicTiles" ng-app="gridListDemoApp">
+  <md-grid-list md-cols="1" md-cols-sm="2" md-cols-md="3" md-cols-gt-md="6" md-row-height-gt-md="1:1" md-row-height="4:3" md-gutter="12px" md-gutter-gt-sm="8px">
+
+    <md-grid-tile ng-repeat="tile in vm.tiles"  id="{{tile.id}}" md-rowspan="{{tile.span.row}}" md-colspan="{{tile.span.col}}" md-colspan-sm="1" md-colspan-xs="1" ng-class="tile.background">
+
+      <md-grid-tile-footer><h3></h3>
+        <md-button class="md-raised"  data="{{tile.mydata}}" ng-click="showConfirm($event )"  >
+      {{tile.title}}
+        </md-button>
+      </md-grid-tile-footer>
+    </md-grid-tile>
+  </md-grid-list>
+</div>
+</md-content>
+  <!-- Angular Material requires Angular.js Libraries -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+  <script src="http://code.angularjs.org/1.2.20/angular-sanitize.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+  <!-- Angular Material Library -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+
+  <!-- Your application bootstrap  -->
+  <script type="text/javascript">
+    /**
+     * You must include the dependency on 'ngMaterial'
+     */
+
+
+
+
+
+   angular
+     .module('gridListDemoApp', ['ngMaterial','ngSanitize','ngRoute'])
+     .controller('gridListDemoCtrl', function($scope, $mdDialog,$http,$location) {
+       $scope.status = '  ';
+       $scope.code = 'Check';
+       $scope.customFullscreen = false;
+       this.tiles = buildGridModel({
+                id: "",
+               title: "Chapter - ",
+               background: "",
+               mydata: ""
+             });
+
+
+
+
+
+             $scope.showConfirm = function(event) {
+               var x = event.target.parentElement.attributes.data.value;
+            //    $window.location.href = '';
+                $location.url('red');
+
+
+                var confirm = $mdDialog.confirm()
+                   .title('Problem 1.1')
+
+                   .htmlContent(x)
+                   .ariaLabel('CTCI')
+                   .targetEvent(event)
+                   .ok('Yes, I Understood')
+                   $mdDialog.show(confirm).then(function() {
+                      $scope.status = 'successfull!';
+                      }, function() {
+                         $scope.status = 'Not successfull';
+                   });
+
+
+                   setTimeout(function () {
+         var code = document.getElementsByTagName('code');
+         angular.forEach(code, function(c) {
+             Prism.highlightElement(c);
+         });
+     }, 1);
+
+
+             };
+
+
+
+
+       function buildGridModel(tileTmpl){
+         var it, results = [ ];
+
+         for (var j=0; j<8; j++) {
+
+           it = angular.extend({},tileTmpl);
+            it.id = it.id + (j+1);
+
+           it.mydata = it.mydata +'<pre class="line-numbers"><code class="language-javascript" >Type Script tutorials\nChecking</code></pre>' ;
+           it.span  = { row : 1, col : 1 };
+
+           switch(j+1) {
+             case 1:
+               it.background = "red";
+                it.title="Strings and Arrays";
+               break;
+
+             case 2: it.background = "green"; it.title="Linked Lists";        break;
+             case 3: it.background = "darkBlue";   it.title="Stacks and Queues";   break;
+             case 4:
+               it.background = "blue";
+                it.title="Trees and Graphs";
+               break;
+
+             case 5:
+               it.background = "yellow";
+               it.title="Bit Manipulation";
+
+               break;
+
+             case 6: it.background = "pink";  it.title="Math and Logic";        break;
+             case 7: it.background = "darkBlue";    it.title="Recursion & DP";  break;
+             case 8: it.background = "purple";     it.title="Sorting & Searching";   break;
+             case 9: it.background = "deepBlue";      break;
+             case 10: it.background = "lightPurple";  break;
+             case 11: it.background = "yellow";       break;
+           }
+
+           results.push(it);
+         }
+         return results;
+       }
+     })
+     .config(function($routeProvider) {
+    $routeProvider
+    .when("/", {
+        templateUrl : "index.html"
+    })
+    .when("/red", {
+        templateUrl : "Chapter 1 -Arrays and Strings/index.html"
+    })
+    .when("/green", {
+        templateUrl : "green.htm"
+    })
+    .when("/blue", {
+        templateUrl : "blue.htm"
+    });
+})
+     ;
+
+
+
+
+
+  </script>
+
+</body>
+</html>
