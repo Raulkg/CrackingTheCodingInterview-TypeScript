@@ -9,7 +9,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Angular Material style sheet -->
   <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+
+<link rel="stylesheet" href="prism.css">
+
   <style>
+
 
   .gridListdemoDynamicTiles .gray {
     background: #f5f5f5; }
@@ -44,9 +48,12 @@
   </style>
 </head>
 <body ng-app="gridListDemoApp" ng-cloak>
+<script src="prism.js"></script>
   <!--
     Your HTML content here
   -->
+
+
   <md-toolbar style="position: fixed;">
     <div class="md-toolbar-tools" ng-hide="showSearchBarDiv">
 
@@ -72,9 +79,13 @@
 <div ng-controller="gridListDemoCtrl as vm" flex="" ng-cloak="" class="gridListdemoDynamicTiles" ng-app="gridListDemoApp">
   <md-grid-list md-cols="1" md-cols-sm="2" md-cols-md="3" md-cols-gt-md="6" md-row-height-gt-md="1:1" md-row-height="4:3" md-gutter="12px" md-gutter-gt-sm="8px">
 
-    <md-grid-tile ng-repeat="tile in vm.tiles" md-rowspan="{{tile.span.row}}" md-colspan="{{tile.span.col}}" md-colspan-sm="1" md-colspan-xs="1" ng-class="tile.background">
-      
-      <md-grid-tile-footer><h3>{{tile.title}}</h3></md-grid-tile-footer>
+    <md-grid-tile ng-repeat="tile in vm.tiles"  id="{{tile.id}}" md-rowspan="{{tile.span.row}}" md-colspan="{{tile.span.col}}" md-colspan-sm="1" md-colspan-xs="1" ng-class="tile.background">
+
+      <md-grid-tile-footer><h3></h3>
+        <md-button class="md-raised"  data="{{tile.mydata}}" ng-click="showConfirm($event )"  >
+      {{tile.title}}
+        </md-button>
+      </md-grid-tile-footer>
     </md-grid-tile>
   </md-grid-list>
 </div>
@@ -84,6 +95,7 @@
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+  <script src="http://code.angularjs.org/1.2.20/angular-sanitize.min.js"></script>
 
   <!-- Angular Material Library -->
   <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
@@ -94,15 +106,62 @@
      * You must include the dependency on 'ngMaterial'
      */
 
+
+
+
+
    angular
-     .module('gridListDemoApp', ['ngMaterial'])
-     .controller('gridListDemoCtrl', function($scope) {
-
+     .module('gridListDemoApp', ['ngMaterial','ngSanitize'])
+     .controller('gridListDemoCtrl', function($scope, $mdDialog,$http) {
+       $scope.status = '  ';
+       $scope.code = 'Check';
+       $scope.customFullscreen = false;
        this.tiles = buildGridModel({
-
+                id: "",
                title: "Problem 1.",
-               background: ""
+               background: "",
+               mydata: ""
              });
+
+             $http.get('prism.css').success(function(data) {
+        $scope.phones = data;
+           });
+
+
+
+
+             $scope.showConfirm = function(event) {
+               var x = event.target.parentElement.attributes.data.value;
+
+
+
+
+                var confirm = $mdDialog.confirm()
+                   .title('Problem 1.1')
+
+                   .htmlContent(x)
+                   .ariaLabel('CTCI')
+                   .targetEvent(event)
+                   .ok('Yes, I Understood')
+                   $mdDialog.show(confirm).then(function() {
+                      $scope.status = 'successfull!';
+                      }, function() {
+                         $scope.status = 'Not successfull';
+                   });
+
+
+                   setTimeout(function () {
+         var code = document.getElementsByTagName('code');
+         angular.forEach(code, function(c) {
+             Prism.highlightElement(c);
+         });
+     }, 1);
+
+
+             };
+
+
+
 
        function buildGridModel(tileTmpl){
          var it, results = [ ];
@@ -110,8 +169,9 @@
          for (var j=0; j<11; j++) {
 
            it = angular.extend({},tileTmpl);
-
+            it.id = it.id + (j+1);
            it.title = it.title + (j+1);
+           it.mydata = it.mydata +'<pre class="line-numbers"><code class="language-javascript" >Type Script tutorials\nChecking</code></pre>' ;
            it.span  = { row : 1, col : 1 };
 
            switch(j+1) {
@@ -146,6 +206,9 @@
        }
      })
     ;
+
+
+
   </script>
 
 </body>
