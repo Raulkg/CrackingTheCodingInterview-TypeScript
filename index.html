@@ -10,7 +10,7 @@
   <!-- Angular Material style sheet -->
   <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
 
-<link rel="stylesheet" href="prism.css">
+
 
   <style>
 
@@ -48,11 +48,11 @@
   </style>
 </head>
 <body ng-app="gridListDemoApp" ng-cloak>
-<script src="prism.js"></script>
+
   <!--
     Your HTML content here
   -->
-<div ng-view></div>
+
 
   <md-toolbar style="position: fixed;">
     <div class="md-toolbar-tools" ng-hide="showSearchBarDiv">
@@ -105,8 +105,8 @@
 
 
    angular
-     .module('gridListDemoApp', ['ngMaterial','ngSanitize','ngRoute'])
-     .controller('gridListDemoCtrl', function($scope, $mdDialog,$http,$location) {
+     .module('gridListDemoApp', ['ngMaterial','ngSanitize'])
+     .controller('gridListDemoCtrl', function($scope, $http,$window,$location) {
        $scope.status = '  ';
        $scope.code = 'Check';
        $scope.customFullscreen = false;
@@ -124,29 +124,15 @@
              $scope.showConfirm = function(event) {
                var x = event.target.parentElement.attributes.data.value;
             //    $window.location.href = '';
-                $location.url('red');
+            if(j=1)
+                $window.location.href= 'CrackingTheCodingInterview-TypeScript/Chapter 1 -Arrays and Strings/index.html';
+            if(j=2)
+            $window.location.href= 'CrackingTheCodingInterview-TypeScript/Chapter 2 - Linked Lists/index.html';
 
 
-                var confirm = $mdDialog.confirm()
-                   .title('Problem 1.1')
-
-                   .htmlContent(x)
-                   .ariaLabel('CTCI')
-                   .targetEvent(event)
-                   .ok('Yes, I Understood')
-                   $mdDialog.show(confirm).then(function() {
-                      $scope.status = 'successfull!';
-                      }, function() {
-                         $scope.status = 'Not successfull';
-                   });
 
 
-                   setTimeout(function () {
-         var code = document.getElementsByTagName('code');
-         angular.forEach(code, function(c) {
-             Prism.highlightElement(c);
-         });
-     }, 1);
+
 
 
              };
@@ -162,7 +148,7 @@
            it = angular.extend({},tileTmpl);
             it.id = it.id + (j+1);
 
-           it.mydata = it.mydata +'<pre class="line-numbers"><code class="language-javascript" >Type Script tutorials\nChecking</code></pre>' ;
+           it.mydata = it.mydata +j+1 ;
            it.span  = { row : 1, col : 1 };
 
            switch(j+1) {
@@ -197,21 +183,7 @@
          return results;
        }
      })
-     .config(function($routeProvider) {
-    $routeProvider
-    .when("/", {
-        templateUrl : "index.html"
-    })
-    .when("/red", {
-        templateUrl : "Chapter 1 -Arrays and Strings/index.html"
-    })
-    .when("/green", {
-        templateUrl : "green.htm"
-    })
-    .when("/blue", {
-        templateUrl : "blue.htm"
-    });
-})
+
      ;
 
 
